@@ -1,4 +1,4 @@
-LAB 1 & 2 - Apache Hudi Datasource and Deltastreamer operations
+**LAB 1 & 2 - Apache Hudi Datasource and Deltastreamer operations** <br />
 
 1) Download pem file from s3://<account-number>-hudi-demo/keypairs/ <br />
 Convert PEM to PPK if your desktop is windows -> https://aws.amazon.com/premiumsupport/knowledge-center/convert-pem-file-into-ppk/ <br />
@@ -27,7 +27,7 @@ password - jupyter <br />
 
 8) Follow the instructions on the notebook <br />
 
-LAB 3 - Building Data Lake with Apache Hudi <br />
+**LAB 3 - Building Data Lake with Apache Hudi** <br />
 
 Create Kafka Python client on EC2 instance "Kafka Producer" <br />
 
