@@ -9,29 +9,40 @@ EMR - ssh -i <account_ID>.pem hadoop@ec2-xx-xx-x-x.compute-1.amazonaws.com
 EC2 - ssh -i <account_ID>.pem ec2-user@ec2-xx-xx-x-x.compute-1.amazonaws.com
 ```
 
-3) On EMR master node, copy workshop contents to S3. Can also be downloaded to local.
-
-```
-mkdir git
-cd git
-git clone https://github.com/vasveena/hudi-workshop.git
-aws s3 cp ../git/ s3://accountID-hudi-workshop/artifact/ --recursive
-```
-
-4) Create SSH tunnel for the EMR cluster "Hudi Demo" using dynamic port forwarding -  https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-ssh-tunnel.html <br />
+3) Create SSH tunnel for the EMR cluster "Hudi Demo" using dynamic port forwarding -  https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-ssh-tunnel.html <br />
 ```
 ssh -i ~/<account_ID>.pem -ND 8157 hadoop@ec2-xx-xx-x-x.compute-1.amazonaws.com
 ```
 
-5) Open JupyterHub UI on EMR - https://ec2-xx-xx-x-x.compute-1.amazonaws.com:9443 <br />
+4) On EMR master node, copy workshop contents to S3. Can also be downloaded to local.
 
-6) Login to JupyterHub <br />
+```
+mkdir git
+cd git
+sudo yum install -y git
+git clone https://github.com/vasveena/hudi-workshop.git
+```
+
+5) Edit "json-deltastreamer.properties" and "json-deltastreamer_upsert.properties" under LAB2/
+```
+hoodie.deltastreamer.source.dfs.root=s3://accountID-hudi-workshop/hudi-ds/inputdata/
+hoodie.deltastreamer.source.dfs.root=s3://accountID-hudi-workshop/hudi-ds/updates
+
+hoodie.deltastreamer.schemaprovider.source.schema.file=s3://accountID-hudi-workshop/artifact/hudi-workshop/LAB2/source-schema-json.avsc
+hoodie.deltastreamer.schemaprovider.target.schema.file=s3://accountID-hudi-workshop/artifact/hudi-workshop/LAB2/target-schema-json.avsc
+
+aws s3 cp ~/git/ s3://accountID-hudi-workshop/artifact/ --recursive
+```
+
+6) Open JupyterHub UI on EMR - https://ec2-xx-xx-x-x.compute-1.amazonaws.com:9443 <br />
+
+7) Login to JupyterHub <br />
 username - jovyan <br />
 password - jupyter <br />
 
-7) Download files "apache-hudi-on-amazon-emr-datasource-pyspark-demo" and "apache-hudi-on-amazon-emr-deltastreamer-python-demo" taken from LAB 1 and 2 folders in GitHub and upload these two files to Jupyter <br />
+8) Download files "apache-hudi-on-amazon-emr-datasource-pyspark-demo" and "apache-hudi-on-amazon-emr-deltastreamer-python-demo" taken from LAB 1 and 2 folders in GitHub and upload these two files to Jupyter <br />
 
-8) Follow the instructions on the notebooks <br />
+9) Follow the instructions on the notebooks <br />
 
 **LAB 3 - Building Data Lake with Apache Hudi** <br />
 
