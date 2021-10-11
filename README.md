@@ -4,18 +4,24 @@
 Convert PEM to PPK if your desktop is windows -> https://aws.amazon.com/premiumsupport/knowledge-center/convert-pem-file-into-ppk/ <br />
 
 2) Make sure you are able to SSH to the EMR cluster "Hudi Demo" and EC2 instance "Kafka Producer" <br />
-EMR - ssh -i <account_ID>.pem hadoop@ec2-xx-xx-x-x.compute-1.amazonaws.com <br />
-EC2 - ssh -i <account_ID>.pem ec2-user@ec2-xx-xx-x-x.compute-1.amazonaws.com <br />
+```
+EMR - ssh -i <account_ID>.pem hadoop@ec2-xx-xx-x-x.compute-1.amazonaws.com
+EC2 - ssh -i <account_ID>.pem ec2-user@ec2-xx-xx-x-x.compute-1.amazonaws.com
+```
 
 3) On EMR master node, copy workshop contents to S3. Can also be downloaded to local.
 
-mkdir git <br />
-cd git <br />
-git clone https://github.com/vasveena/hudi-workshop.git <br />
-aws s3 cp ../git/ s3://accountID-hudi-workshop/artifact/ --recursive <br />
+```
+mkdir git
+cd git
+git clone https://github.com/vasveena/hudi-workshop.git
+aws s3 cp ../git/ s3://accountID-hudi-workshop/artifact/ --recursive
+```
 
 4) Create SSH tunnel for the EMR cluster "Hudi Demo" using dynamic port forwarding -  https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-ssh-tunnel.html <br />
-ssh -i ~/<account_ID>.pem -ND 8157 hadoop@ec2-xx-xx-x-x.compute-1.amazonaws.com <br />
+```
+ssh -i ~/<account_ID>.pem -ND 8157 hadoop@ec2-xx-xx-x-x.compute-1.amazonaws.com
+```
 
 5) Open JupyterHub UI on EMR - https://ec2-xx-xx-x-x.compute-1.amazonaws.com:9443 <br />
 
@@ -25,7 +31,7 @@ password - jupyter <br />
 
 7) Download files "apache-hudi-on-amazon-emr-datasource-pyspark-demo" and "apache-hudi-on-amazon-emr-deltastreamer-python-demo" taken from LAB 1 and 2 folders in GitHub and upload these two files to Jupyter <br />
 
-8) Follow the instructions on the notebook <br />
+8) Follow the instructions on the notebooks <br />
 
 **LAB 3 - Building Data Lake with Apache Hudi** <br />
 
@@ -80,8 +86,9 @@ aws kafka get-bootstrap-brokers --cluster-arn "arn:aws:kafka:us-east-1:620614497
 export MTA_API_KEY=<provided key>
 ```
 
-6) Run the client <br />
-```python3 train_arrival_producer.py
+6) Run the Kafka producer client <br />
+```
+python3 train_arrival_producer.py
 ```
 
 7) You can verify that the Kafka topics are being written to using the following commands <br />
