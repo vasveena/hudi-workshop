@@ -137,6 +137,12 @@ sudo wget https://repo1.maven.org/maven2/org/apache/commons/commons-pool2/2.11.1
 
 11) Once data starts getting written to Hudi table, create table and query via Athena or Redshift spectrum. Refer to "redshift_spectrum_queries.sql" in LAB3 <br />
 
+```
+select count(distinct tripId) from unknown group by _hoodie_commit_time
+
+select distinct _hoodie_commit_time from unknown;
+```
+
 12) [Optional] Visualize live trip updates using Quicksight <br />
 
 BONUS TAKE HOME LAB - <br />
