@@ -48,7 +48,7 @@ password - jupyter <br />
 
 Create Kafka Python client on EC2 instance "Kafka Producer" <br />
 
-1) Download Kafka client dependencies <br />
+1) SSH into EC2 instance and download Kafka client dependencies <br />
 ```
 sudo su
 which python3
@@ -66,16 +66,21 @@ sudo /root/.local/bin/pip install pathlib
 
 exit
 
-sudo yum install java-1.8.0
+sudo yum install -y java-1.8.0
 wget https://archive.apache.org/dist/kafka/2.2.1/kafka_2.12-2.2.1.tgz
 tar -xzf kafka_2.12-2.2.1.tgz
 ```
-2) Run the two commands in EMR master node to get the values of ZookeeperConnectString and BootstrapBrokerString <br />
+2) Run the two commands in EC2 instance to get the values of ZookeeperConnectString and BootstrapBrokerString. Replace your Kafka cluster's ARN <br />
 
 ```
-aws kafka describe-cluster --region us-east-1 --cluster-arn arn:aws:kafka:us-east-1:620614497509:cluster/test/2dbb304e-79fe-4beb-a02d-35e0fea4524b-2 | grep ZookeeperConnectString -> copy the value of "ZookeeperConnectString"
+aws kafka describe-cluster --region us-east-1 --cluster-arn arn:aws:kafka:us-east-1:166573744155:cluster/hudi-demo-msk-cluster/41bd528b-c96a-4c65-880f-acfa08937c41-16 | grep ZookeeperConnectString
 
-aws kafka get-bootstrap-brokers --cluster-arn "arn:aws:kafka:us-east-1:620614497509:cluster/test/2dbb304e-79fe-4beb-a02d-35e0fea4524b-2" -> copy the bootstrap servers value
+Copy the value of "ZookeeperConnectString"
+
+aws kafka get-bootstrap-brokers --cluster-arn "arn:aws:kafka:us-east-1:620614497509:cluster/test/2dbb304e-79fe-4beb-a02d-35e0fea4524b-2"
+
+Copy the value of "BootstrapBrokerString"
+
 {
     "BootstrapBrokerString": "b-2.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092,b-1.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092,b-3.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092"
 }
@@ -92,6 +97,12 @@ aws kafka get-bootstrap-brokers --cluster-arn "arn:aws:kafka:us-east-1:620614497
 
 4) Download the file "train_arrival_producer.py" from Github (LAB3) and replace the bootstrap servers value in line #15 <br />
 
+```
+aws s3 cp s3://166573744155-hudi-workshop/artifact/hudi-workshop/LAB3/train_arrival_producer.py ~
+vi train_arrival_producer.py
+
+```
+
 5) Export API key <br />
 ```
 export MTA_API_KEY=<provided key>
@@ -104,9 +115,9 @@ python3 train_arrival_producer.py
 
 7) You can verify that the Kafka topics are being written to using the following commands <br />
 ```
-/home/hadoop/kafka_2.12-2.2.1/bin/kafka-console-consumer.sh --bootstrap-server "b-3.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092,b-1.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092,b-2.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092" --topic trip_update_topic --from-beginning
+/home/ec2-user/kafka_2.12-2.2.1/bin/kafka-console-consumer.sh --bootstrap-server "b-3.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092,b-1.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092,b-2.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092" --topic trip_update_topic --from-beginning
 
-/home/hadoop/kafka_2.12-2.2.1/bin/kafka-console-consumer.sh --bootstrap-server "b-3.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092,b-1.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092,b-2.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092" --topic trip_status_topic --from-beginning
+/home/ec2-user/kafka_2.12-2.2.1/bin/kafka-console-consumer.sh --bootstrap-server "b-3.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092,b-1.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092,b-2.test.1tklkx.c2.kafka.us-east-1.amazonaws.com:9092" --topic trip_status_topic --from-beginning
 ```
 Configure Spark consumer on EMR master node (Hudi Demo) <br />
 
@@ -117,7 +128,7 @@ cd /usr/lib/spark/jars
 sudo wget https://repo1.maven.org/maven2/org/apache/spark/spark-streaming-kafka-0-10_2.12/3.0.1/spark-streaming-kafka-0-10_2.12-3.0.1.jar
 sudo wget https://repo1.maven.org/maven2/org/apache/spark/spark-sql-kafka-0-10_2.12/3.0.1/spark-sql-kafka-0-10_2.12-3.0.1.jar
 sudo wget https://repo1.maven.org/maven2/org/apache/kafka/kafka-clients/2.2.1/kafka-clients-2.2.1.jar
-sudo wget https://repo1.maven.org/maven2/org/apache/spark/spark-streaming-kafka-0-10-assembly_2.12/3.0.0-preview2/spark-streaming-kafka-0-10-assembly_2.12-3.0.0-preview2.jar
+sudo wget https://repo1.maven.org/maven2/org/apache/spark/spark-streaming-kafka-0-10-assembly_2.12/3.0.1/spark-streaming-kafka-0-10-assembly_2.12-3.0.1.jar
 sudo wget https://repo1.maven.org/maven2/org/apache/commons/commons-pool2/2.11.1/commons-pool2-2.11.1.jar
 ```
 9) Download notebook "amazon-emr-spark-streaming-apache-hudi-demo" and upload to JupyterHub <br />
