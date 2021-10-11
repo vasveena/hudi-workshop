@@ -1,6 +1,6 @@
 **LAB 1 & 2 - Apache Hudi Datasource and Deltastreamer operations** <br />
 
-1) Download pem file from s3://<account-number>-hudi-demo/keypairs/ <br />
+1) Download pem file from s3://account_ID-hudi-workshop/keys/ <br />
 Convert PEM to PPK if your desktop is windows -> https://aws.amazon.com/premiumsupport/knowledge-center/convert-pem-file-into-ppk/ <br />
 
 2) Make sure you are able to SSH to the EMR cluster "Hudi Demo" and EC2 instance "Kafka Producer" <br />
